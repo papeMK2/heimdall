@@ -23,6 +23,7 @@ namespace heimdall.FunctionApps
         [Function(nameof(BlobTransfer))]
         public async Task Run([BlobTrigger("%TARGET_BLOB_PATH%/{name}", Connection = "STORAGE_CONNECTION_STRING")] Stream stream, string name)
         {
+            var uploadFileName = string.IsNullOrEmpty(_config.FileName) ? name : _config.FileName;
             if(_config.AuthenticationMethod == Enums.AuthenticationMethod.PrivateKey)
             {
                 if(_config.PrivateKey is null)
@@ -45,8 +46,7 @@ namespace heimdall.FunctionApps
                 using (var client = new SftpClient(sftpConnectionInfo))
                 {
                     client.Connect();
-                    var items = client.ListDirectory("uploads");
-                    client.UploadFile(stream, $"/uploads/{name}");
+                    client.UploadFile(stream, $"/{_config.UploadPath.Trim('/')}/{uploadFileName}");
                 }
             }
             else if(_config.AuthenticationMethod == Enums.AuthenticationMethod.None)

@@ -27,6 +27,16 @@ public class ApplicationConfig
     /// </summary>
     public int SftpFileEncode { get; set; } = 65001;
     /// <summary>
+    /// File upload path
+    /// </summary>
+    public string UploadPath { get; set; } = "";
+    /// <summary>
+    /// Upload file name
+    /// 
+    /// If empty, use blob name
+    /// </summary>
+    public string FileName { get; set; } = "";
+    /// <summary>
     /// SFTP Server authentication method
     /// </summary>
     public AuthenticationMethod AuthenticationMethod { get; set; }
